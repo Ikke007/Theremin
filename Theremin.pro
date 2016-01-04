@@ -20,3 +20,5 @@ HEADERS  += mainwindow.h \
     CXBOXController.h
 
 FORMS    += mainwindow.ui
+
+LIBS += -lXInput
