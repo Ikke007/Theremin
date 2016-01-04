@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    CXBOXController.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    CXBOXController.h
 
 FORMS    += mainwindow.ui

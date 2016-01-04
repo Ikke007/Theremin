@@ -4,6 +4,7 @@
 #include <QSerialPortInfo>
 #include <QDebug>
 #include <QtWidgets>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -42,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     if(arduino_is_available){
-       // open and configure the serialport
+        // open and configure the serialport
         arduino->setPortName(arduino_port_name);
         arduino->open(QSerialPort::ReadOnly);
         arduino->setBaudRate(QSerialPort::Baud9600);
@@ -55,6 +56,12 @@ MainWindow::MainWindow(QWidget *parent) :
     }else{
         // give error message if not available
         QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
+
+        // .. and use XBox Controller instead
+        controller = new CXBOXController(1);
+        QTimer *timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(controllerInput()));
+        timer->start(100);
     }
 }
 
@@ -64,6 +71,23 @@ MainWindow::~MainWindow()
         arduino->close();
     }
     delete ui;
+    if(controller != NULL)
+        delete(controller);
+}
+
+
+void MainWindow::controllerInput()
+{
+    if(controller->IsConnected())
+    {
+        processRawData(controller->GetState().Gamepad.sThumbRY * 100 / 32780,
+                       controller->GetState().Gamepad.sThumbLY * 100 / 32780);
+    }
+    else
+    {
+        qDebug() << "\n\tERROR! PLAYER 1 - XBOX 360 Controller Not Found!\n";
+        QCoreApplication::exit(1);
+    }
 }
 
 void MainWindow::readSerial(){
@@ -74,11 +98,25 @@ void MainWindow::readSerial(){
         serialBuffer += QString::fromStdString((serialData.toStdString()));
     }else{
         qDebug() << "FSR1: " << bufferSplit[0] << ", FSR2: " << bufferSplit[1];
+        processRawData(bufferSplit[0].toInt(), bufferSplit[1].toInt());
         serialBuffer = "";
     }
-
-
-
-
-
 }
+
+// TODO auf irgendeinen Wertebereich festlegen? Zum testen hab ich 0 bis 100 genommen, das ist wohl ein bisschen klein ;)
+void MainWindow::processRawData(int pitch, int volume)
+{
+    if (ui->checkBox_invert->isChecked())
+    {
+        int temp = pitch;
+        pitch = volume;
+        volume = temp;
+    }
+    ui->progressBar->setValue(pitch);
+    ui->lcdNumber->display(pitch);
+    ui->progressBar_2->setValue(volume);
+    ui->lcdNumber_2->display(volume);
+
+    // TODO generate MIDI data here
+}
+
