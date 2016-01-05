@@ -12,6 +12,8 @@
 #include "CXBOXController.h"
 #endif
 
+#include "midioutput.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -30,7 +32,7 @@ private slots:
 #ifdef XCONTROLLER
     void controllerInput();
 #endif
-    void processRawData(int pitch, int volume);
+    void processRawData(double pitch, double volume);
 
 
 private:
@@ -42,6 +44,11 @@ private:
     bool arduino_is_available;
     QByteArray serialData;
     QString serialBuffer;
+
+    drumstick::rt::MIDIOutput midiOutput;
+    int midichannel;
+    int activeNote = -1;
+
 #ifdef XCONTROLLER
     CXBOXController* controller;
 #endif

@@ -22,3 +22,5 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui
 
 LIBS += -lXInput
+
+include(drumstick/drumstick.pro)

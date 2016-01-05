@@ -4,13 +4,31 @@
 #include <QSerialPortInfo>
 #include <QDebug>
 #include <QtWidgets>
-#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // initialize midi output
+
+    // TODO add midi output selection
+        //QStringList connections = midiOutput.connections(true);
+        //ui->comboBox->addItems(connections);
+
+    if (!midiOutput.open("CoolSoft VirtualMIDISynth"))
+        midiOutput.open("Microsoft GS Wavetable Synth");
+
+    // TODO let the user choose the midi channel
+    midichannel = 0;
+    midiOutput.sendProgram(midichannel, 81); // irgendein Synth Programm
+
+    // eigentlich sollten das hier attack und release time sein,
+    // aber da bin ich mir nicht so sicher...
+    midiOutput.sendController(midichannel,72,40);
+    midiOutput.sendController(midichannel,73,0);
+    //midiOutput.sendController(midichannel,68,0);
 
     arduino_is_available = false;
     arduino_port_name = "";
@@ -54,16 +72,22 @@ MainWindow::MainWindow(QWidget *parent) :
         QObject::connect(arduino, SIGNAL(readyRead()),this, SLOT(readSerial()));
 
     }else{
+
+
+#ifndef XCONTROLLER
         // give error message if not available
         QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
-
-#ifdef XCONTROLLER
+#else
         // .. and use XBox Controller instead
         controller = new CXBOXController(1);
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(controllerInput()));
-        timer->start(100);
+        timer->start(10);
 #endif
+
+        /*for (int i = 5000000; i < 10000000; i++) {
+            processRawData(i / 10000000.0, 20);
+        }*/
     }
 }
 
@@ -84,8 +108,8 @@ void MainWindow::controllerInput()
 {
     if(controller->IsConnected())
     {
-        processRawData(controller->GetState().Gamepad.sThumbRY * 100 / 32780,
-                       controller->GetState().Gamepad.sThumbLY * 100 / 32780);
+        processRawData(controller->GetState().Gamepad.sThumbRY / 32780.0,
+                       controller->GetState().Gamepad.sThumbLY / 32780.0);
     }
     else
     {
@@ -103,25 +127,44 @@ void MainWindow::readSerial(){
         serialBuffer += QString::fromStdString((serialData.toStdString()));
     }else{
         qDebug() << "FSR1: " << bufferSplit[0] << ", FSR2: " << bufferSplit[1];
-        processRawData(bufferSplit[0].toInt(), bufferSplit[1].toInt());
+        processRawData(bufferSplit[0].toInt() / 1024.0, bufferSplit[1].toInt() / 1024.0);
         serialBuffer = "";
     }
 }
 
 // TODO auf irgendeinen Wertebereich festlegen? Zum testen hab ich 0 bis 100 genommen, das ist wohl ein bisschen klein ;)
-void MainWindow::processRawData(int pitch, int volume)
+// von 0 bis 1 ?
+void MainWindow::processRawData(double frequency, double volume)
 {
     if (ui->checkBox_invert->isChecked())
     {
-        int temp = pitch;
-        pitch = volume;
+        int temp = frequency;
+        frequency = volume;
         volume = temp;
     }
-    ui->progressBar->setValue(pitch);
-    ui->lcdNumber->display(pitch);
-    ui->progressBar_2->setValue(volume);
-    ui->lcdNumber_2->display(volume);
+
+    // display frequency
+    ui->progressBar->setValue(frequency * 100);
+    ui->lcdNumber->display(frequency * 100);
+
 
     // TODO generate MIDI data here
+    int newNote = frequency * 128;
+    double pitch = frequency * 128 - newNote;
+
+    // fix for MS GS Wavetable Synth
+    if (newNote < 0)
+        newNote = -1;
+
+    // display pitch bend value (not volume at the moment...)
+    ui->progressBar_2->setValue(pitch * 100);
+    ui->lcdNumber_2->display(pitch * 100);
+    midiOutput.sendPitchBend(midichannel, pitch * 4096);
+    //midiOutput.sendPitchBend(midichannel, volume * 8192);
+    if (activeNote != newNote) {
+        midiOutput.sendNoteOn(midichannel, newNote, 127);
+        midiOutput.sendNoteOff(midichannel, activeNote, 0);
+        activeNote = newNote;
+    }
 }
 
