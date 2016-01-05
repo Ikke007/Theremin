@@ -95,14 +95,15 @@ MainWindow::~MainWindow()
 void MainWindow::readSerial(){
 
     QStringList bufferSplit = serialBuffer.split(",");
-    if(bufferSplit.length() < 2){
+    if(bufferSplit.length() < 3){
         serialData = arduino->readAll();
-        serialBuffer += QString::fromStdString((serialData.toStdString()));
+        serialBuffer += QString::fromStdString(serialData.toStdString());
     }else{
-        qDebug() << "FSR1: " << bufferSplit[0] << ", FSR2: " << bufferSplit[1];
-        processRawData(bufferSplit[0].toInt() / 1024.0, bufferSplit[1].toInt() / 1024.0);
+        qDebug() << "FSR1: " << bufferSplit[0].toDouble() << ", FSR2: " << bufferSplit[1].toDouble();
+        processRawData(bufferSplit[0].toDouble() / 1024.0, bufferSplit[1].toDouble() / 1024.0);
         serialBuffer = "";
     }
+
 }
 
 // TODO auf irgendeinen Wertebereich festlegen? Zum testen hab ich 0 bis 100 genommen, das ist wohl ein bisschen klein ;)
