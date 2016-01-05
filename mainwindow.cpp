@@ -73,17 +73,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     }else{
 
-
-#ifndef XCONTROLLER
         // give error message if not available
-        QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
-#else
-        // .. and use XBox Controller instead
-        controller = new CXBOXController(1);
-        QTimer *timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(controllerInput()));
-        timer->start(10);
-#endif
+        //QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
+
 
         /*for (int i = 5000000; i < 10000000; i++) {
             processRawData(i / 10000000.0, 20);
@@ -97,27 +89,8 @@ MainWindow::~MainWindow()
         arduino->close();
     }
     delete ui;
-#ifdef XCONTROLLER
-    if(controller != NULL)
-        delete(controller);
-#endif
 }
 
-#ifdef XCONTROLLER
-void MainWindow::controllerInput()
-{
-    if(controller->IsConnected())
-    {
-        processRawData(controller->GetState().Gamepad.sThumbRY / 32780.0,
-                       controller->GetState().Gamepad.sThumbLY / 32780.0);
-    }
-    else
-    {
-        qDebug() << "\n\tERROR! PLAYER 1 - XBOX 360 Controller Not Found!\n";
-        QCoreApplication::exit(1);
-    }
-}
-#endif
 
 void MainWindow::readSerial(){
 
@@ -168,3 +141,8 @@ void MainWindow::processRawData(double frequency, double volume)
     }
 }
 
+
+void MainWindow::on_frequencySlider_valueChanged(int value)
+{
+    processRawData(value / 10000.0, 1);
+}

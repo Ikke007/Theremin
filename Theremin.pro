@@ -13,14 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    CXBOXController.cpp
+        mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    CXBOXController.h
+HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
-
-LIBS += -lXInput
 
 include(drumstick/drumstick.pro)

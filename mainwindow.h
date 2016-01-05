@@ -4,14 +4,6 @@
 #include <QMainWindow>
 #include <QSerialPort>
 
-#ifdef _MSC_VER
-#define XCONTROLLER
-#endif
-
-#ifdef XCONTROLLER
-#include "CXBOXController.h"
-#endif
-
 #include "midioutput.h"
 
 namespace Ui {
@@ -29,11 +21,10 @@ public:
 private slots:
 
     void readSerial();
-#ifdef XCONTROLLER
-    void controllerInput();
-#endif
     void processRawData(double pitch, double volume);
 
+
+    void on_frequencySlider_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
@@ -48,10 +39,6 @@ private:
     drumstick::rt::MIDIOutput midiOutput;
     int midichannel;
     int activeNote = -1;
-
-#ifdef XCONTROLLER
-    CXBOXController* controller;
-#endif
 };
 
 #endif // MAINWINDOW_H
