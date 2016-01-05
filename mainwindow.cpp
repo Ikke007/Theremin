@@ -57,11 +57,13 @@ MainWindow::MainWindow(QWidget *parent) :
         // give error message if not available
         QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
 
+#ifdef XCONTROLLER
         // .. and use XBox Controller instead
         controller = new CXBOXController(1);
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(controllerInput()));
         timer->start(100);
+#endif
     }
 }
 
@@ -71,11 +73,13 @@ MainWindow::~MainWindow()
         arduino->close();
     }
     delete ui;
+#ifdef XCONTROLLER
     if(controller != NULL)
         delete(controller);
+#endif
 }
 
-
+#ifdef XCONTROLLER
 void MainWindow::controllerInput()
 {
     if(controller->IsConnected())
@@ -89,6 +93,7 @@ void MainWindow::controllerInput()
         QCoreApplication::exit(1);
     }
 }
+#endif
 
 void MainWindow::readSerial(){
 

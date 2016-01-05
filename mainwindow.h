@@ -3,7 +3,14 @@
 
 #include <QMainWindow>
 #include <QSerialPort>
+
+#ifdef _MSC_VER
+#define XCONTROLLER
+#endif
+
+#ifdef XCONTROLLER
 #include "CXBOXController.h"
+#endif
 
 namespace Ui {
 class MainWindow;
@@ -20,7 +27,9 @@ public:
 private slots:
 
     void readSerial();
+#ifdef XCONTROLLER
     void controllerInput();
+#endif
     void processRawData(int pitch, int volume);
 
 
@@ -33,7 +42,9 @@ private:
     bool arduino_is_available;
     QByteArray serialData;
     QString serialBuffer;
+#ifdef XCONTROLLER
     CXBOXController* controller;
+#endif
 };
 
 #endif // MAINWINDOW_H
