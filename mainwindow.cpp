@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //QStringList connections = midiOutput.connections(true);
         //ui->comboBox->addItems(connections);
 
-    if (!midiOutput.open("CoolSoft VirtualMIDISynth"))
+//    if (!midiOutput.open("CoolSoft VirtualMIDISynth"))
         midiOutput.open("Microsoft GS Wavetable Synth");
 
     // TODO let the user choose the midi channel
@@ -120,30 +120,43 @@ void MainWindow::processRawData(double frequency, double volume)
     // display frequency
     ui->progressBar->setValue(frequency * 100);
     ui->lcdNumber->display(frequency * 100);
+    // display volume
+    ui->progressBar_2->setValue(volume * 100);
+    ui->lcdNumber_2->display(volume * 100);
 
-
-    // TODO generate MIDI data here
+    // generate MIDI data
     int newNote = frequency * 128;
     double pitch = frequency * 128 - newNote;
+
+    midiOutput.sendPitchBend(midichannel, pitch * 4096);
 
     // fix for MS GS Wavetable Synth
     if (newNote < 0)
         newNote = -1;
 
-    // display pitch bend value (not volume at the moment...)
-    ui->progressBar_2->setValue(pitch * 100);
-    ui->lcdNumber_2->display(pitch * 100);
-    midiOutput.sendPitchBend(midichannel, pitch * 4096);
     //midiOutput.sendPitchBend(midichannel, volume * 8192);
     if (activeNote != newNote) {
         midiOutput.sendNoteOn(midichannel, newNote, 127);
         midiOutput.sendNoteOff(midichannel, activeNote, 0);
         activeNote = newNote;
     }
+
+    // send volume
+    midiOutput.sendController(midichannel, 7, volume * 128);
+}
+
+void MainWindow::sendSliderInput() {
+    processRawData(ui->frequencySlider->value() / 10000.0,
+                   ui->volumeSlider->value() / 1000.0);
 }
 
 
 void MainWindow::on_frequencySlider_valueChanged(int value)
 {
-    processRawData(value / 10000.0, 1);
+    sendSliderInput();
+}
+
+void MainWindow::on_volumeSlider_valueChanged(int value)
+{
+    sendSliderInput();
 }

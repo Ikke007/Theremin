@@ -23,8 +23,9 @@ private slots:
     void readSerial();
     void processRawData(double pitch, double volume);
 
-
     void on_frequencySlider_valueChanged(int value);
+    void on_volumeSlider_valueChanged(int value);
+    void sendSliderInput();
 
 private:
     Ui::MainWindow *ui;
