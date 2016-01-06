@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    arduinocontroller.cpp
+    arduinocontroller.cpp \
+    midigenerator.cpp
 
 HEADERS  += mainwindow.h \
-    arduinocontroller.h
+    arduinocontroller.h \
+    midigenerator.h
 
 FORMS    += mainwindow.ui
 
