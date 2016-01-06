@@ -28,6 +28,8 @@ private slots:
 
     void on_checkBox_invert_toggled(bool checked);
 
+    void on_midiChannel_valueChanged(int arg1);
+
 private:
     void sendSliderInput();
 

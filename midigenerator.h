@@ -11,6 +11,7 @@ class MidiGenerator : public QObject
 public:
     MidiGenerator();
     void setInvertInput(bool invert);
+    void setMidiChannel(int channel);
 
 private:
     bool invertedInput = false;

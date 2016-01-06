@@ -11,7 +11,7 @@ MidiGenerator::MidiGenerator()
 
     // TODO let the user choose the midi channel
     midichannel = 0;
-    midiOutput.sendProgram(midichannel, 81); // irgendein Synth Programm
+    midiOutput.sendProgram(midichannel, 50); // irgendein Synth Programm
 
     // eigentlich sollten das hier attack und release time sein,
     // aber da bin ich mir nicht so sicher...
@@ -56,5 +56,9 @@ void MidiGenerator::processRawInput(double frequency, double volume)
 
 void MidiGenerator::setInvertInput(bool invert) {
     invertedInput = invert;
+}
+
+void MidiGenerator::setMidiChannel(int channel) {
+     midiOutput.sendProgram(midichannel, channel);
 }
 

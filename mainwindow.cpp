@@ -57,3 +57,8 @@ void MainWindow::on_checkBox_invert_toggled(bool checked)
 {
     midiGenerator.setInvertInput(checked);
 }
+
+void MainWindow::on_midiChannel_valueChanged(int channel)
+{
+    midiGenerator.setMidiChannel(channel);
+}
