@@ -11,15 +11,17 @@ class MidiGenerator : public QObject
 public:
     MidiGenerator();
     void setInvertInput(bool invert);
-    void setMidiChannel(int channel);
+    void setProgram(int program);
 
 private:
     bool invertedInput = false;
     drumstick::rt::MIDIOutput midiOutput;
-    int midichannel;
+    int channel = 0;
+    int program = 50;
     int activeNote = -1;
 
 public slots:
+    /** Wertebereich von 0 bis 1 */
     void processRawInput(double pitch, double volume);
 
 signals:

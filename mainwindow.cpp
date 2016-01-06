@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(&midiGenerator, SIGNAL(inputGenerated(double, double)),
                      this, SLOT(onInputGenerated(double, double)));
-
-
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +29,6 @@ void MainWindow::sendSliderInput() {
     sendRawInput(ui->frequencySlider->value() / 10000.0,
                    ui->volumeSlider->value() / 1000.0);
 }
-
 
 void MainWindow::on_frequencySlider_valueChanged(int value)
 {
@@ -58,7 +55,7 @@ void MainWindow::on_checkBox_invert_toggled(bool checked)
     midiGenerator.setInvertInput(checked);
 }
 
-void MainWindow::on_midiChannel_valueChanged(int channel)
+void MainWindow::on_midiProgram_valueChanged(int program)
 {
-    midiGenerator.setMidiChannel(channel);
+    midiGenerator.setProgram(program);
 }

@@ -152,7 +152,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QSpinBox" name="midiChannel">
+   <widget class="QSpinBox" name="midiProgram">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -178,7 +178,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>MIDI Channel</string>
+     <string>MIDI Program</string>
     </property>
    </widget>
   </widget>
@@ -188,7 +188,7 @@
      <x>0</x>
      <y>0</y>
      <width>392</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

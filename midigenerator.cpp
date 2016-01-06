@@ -10,18 +10,16 @@ MidiGenerator::MidiGenerator()
         midiOutput.open("Microsoft GS Wavetable Synth");
 
     // TODO let the user choose the midi channel
-    midichannel = 0;
-    midiOutput.sendProgram(midichannel, 50); // irgendein Synth Programm
+
+    midiOutput.sendProgram(channel, program); // irgendein Synth Programm
 
     // eigentlich sollten das hier attack und release time sein,
     // aber da bin ich mir nicht so sicher...
-    midiOutput.sendController(midichannel,72,40);
-    midiOutput.sendController(midichannel,73,0);
+    midiOutput.sendController(channel,72,40);
+    midiOutput.sendController(channel,73,0);
     //midiOutput.sendController(midichannel,68,0);
 }
 
-// TODO auf irgendeinen Wertebereich festlegen? Zum testen hab ich 0 bis 100 genommen, das ist wohl ein bisschen klein ;)
-// von 0 bis 1 ?
 void MidiGenerator::processRawInput(double frequency, double volume)
 {
     if (invertedInput)
@@ -35,7 +33,7 @@ void MidiGenerator::processRawInput(double frequency, double volume)
     int newNote = frequency * 127;
     double pitch = frequency * 127 - newNote;
 
-    midiOutput.sendPitchBend(midichannel, pitch * 4096);
+    midiOutput.sendPitchBend(channel, pitch * 4096);
 
     // fix for MS GS Wavetable Synth
     if (newNote < 0)
@@ -43,13 +41,13 @@ void MidiGenerator::processRawInput(double frequency, double volume)
 
     //midiOutput.sendPitchBend(midichannel, volume * 8192);
     if (activeNote != newNote) {
-        midiOutput.sendNoteOn(midichannel, newNote, 127);
-        midiOutput.sendNoteOff(midichannel, activeNote, 0);
+        midiOutput.sendNoteOn(channel, newNote, 127);
+        midiOutput.sendNoteOff(channel, activeNote, 0);
         activeNote = newNote;
     }
 
     // send volume
-    midiOutput.sendController(midichannel, 7, volume * 127);
+    midiOutput.sendController(channel, 7, volume * 127);
 
     inputGenerated(frequency, volume);
 }
@@ -58,7 +56,8 @@ void MidiGenerator::setInvertInput(bool invert) {
     invertedInput = invert;
 }
 
-void MidiGenerator::setMidiChannel(int channel) {
-     midiOutput.sendProgram(midichannel, channel);
+void MidiGenerator::setProgram(int program) {
+    this->program = program;
+    midiOutput.sendProgram(channel, program);
 }
 

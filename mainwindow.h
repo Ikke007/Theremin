@@ -22,13 +22,12 @@ signals:
     void sendRawInput(double frequency, double volume);
 
 private slots:
-    void on_frequencySlider_valueChanged(int value);
-    void on_volumeSlider_valueChanged(int value);
     void onInputGenerated(double frequency, double volume);
 
+    void on_frequencySlider_valueChanged(int value);
+    void on_volumeSlider_valueChanged(int value);
     void on_checkBox_invert_toggled(bool checked);
-
-    void on_midiChannel_valueChanged(int arg1);
+    void on_midiProgram_valueChanged(int arg1);
 
 private:
     void sendSliderInput();
