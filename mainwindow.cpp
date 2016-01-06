@@ -58,8 +58,8 @@ void MainWindow::processRawInput(double frequency, double volume)
     ui->lcdNumber_2->display(volume * 100);
 
     // generate MIDI data
-    int newNote = frequency * 128;
-    double pitch = frequency * 128 - newNote;
+    int newNote = frequency * 127;
+    double pitch = frequency * 127 - newNote;
 
     midiOutput.sendPitchBend(midichannel, pitch * 4096);
 
@@ -75,7 +75,7 @@ void MainWindow::processRawInput(double frequency, double volume)
     }
 
     // send volume
-    midiOutput.sendController(midichannel, 7, volume * 128);
+    midiOutput.sendController(midichannel, 7, volume * 127);
 }
 
 void MainWindow::sendSliderInput() {
