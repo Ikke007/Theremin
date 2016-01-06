@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSerialPort>
 
+#include "arduinocontroller.h"
 #include "midioutput.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -19,23 +20,15 @@ public:
     ~MainWindow();
 
 private slots:
-
-    void readSerial();
-    void processRawData(double pitch, double volume);
-
     void on_frequencySlider_valueChanged(int value);
     void on_volumeSlider_valueChanged(int value);
-    void sendSliderInput();
+    void processRawInput(double pitch, double volume);
 
 private:
+    void sendSliderInput();
+
     Ui::MainWindow *ui;
-    QSerialPort *arduino;
-    static const quint16 arduino_due_verndor_id = 9025;
-    static const quint16 arduino_due_product_id = 61;
-    QString arduino_port_name;
-    bool arduino_is_available;
-    QByteArray serialData;
-    QString serialBuffer;
+    ArduinoController arduino;
 
     drumstick::rt::MIDIOutput midiOutput;
     int midichannel;
