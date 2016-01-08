@@ -24,14 +24,22 @@ void MidiGenerator::processRawInput(double frequency, double volume)
 {
     if (invertedInput)
     {
-        double temp = frequency;
-        frequency = volume;
-        volume = temp;
+        this->frequency = volume;
+        this->volume = frequency;
+    } else {
+        this->frequency = frequency;
+        this->volume = volume;
     }
 
+    generate();
+}
+
+void MidiGenerator::generate() {
     // generate MIDI data
-    int newNote = frequency * 127;
-    double pitch = frequency * 127 - newNote;
+    int noteRange = maxNote - minNote;
+    double d_newNote = frequency * noteRange + minNote;
+    int newNote = d_newNote;
+    double pitch = d_newNote - newNote;
 
     midiOutput.sendPitchBend(channel, pitch * 4096);
 
@@ -39,10 +47,10 @@ void MidiGenerator::processRawInput(double frequency, double volume)
     if (newNote < 0)
         newNote = -1;
 
-    //midiOutput.sendPitchBend(midichannel, volume * 8192);
     if (activeNote != newNote) {
         midiOutput.sendNoteOn(channel, newNote, 127);
-        midiOutput.sendNoteOff(channel, activeNote, 0);
+        if (activeNote >= 0)
+            midiOutput.sendNoteOff(channel, activeNote, 0);
         activeNote = newNote;
     }
 
@@ -52,12 +60,29 @@ void MidiGenerator::processRawInput(double frequency, double volume)
     inputGenerated(frequency, volume);
 }
 
+void MidiGenerator::stop() {
+    if (activeNote >= 0)
+        midiOutput.sendNoteOff(channel, activeNote, 0);
+}
+
 void MidiGenerator::setInvertInput(bool invert) {
     invertedInput = invert;
 }
 
 void MidiGenerator::setProgram(int program) {
     this->program = program;
+    if (activeNote >= 0)
+        midiOutput.sendNoteOff(channel, activeNote, 0);
     midiOutput.sendProgram(channel, program);
+    if (activeNote >= 0)
+        midiOutput.sendNoteOn(channel, activeNote, 127);
+}
+
+void MidiGenerator::setMaxNote(int max) {
+    this->maxNote = max;
+}
+
+void MidiGenerator::setMinNote(int min) {
+    this->minNote = min;
 }
 

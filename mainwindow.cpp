@@ -53,9 +53,31 @@ void MainWindow::onInputGenerated(double frequency, double volume)
 void MainWindow::on_checkBox_invert_toggled(bool checked)
 {
     midiGenerator.setInvertInput(checked);
+    midiGenerator.generate();
 }
 
 void MainWindow::on_midiProgram_valueChanged(int program)
 {
     midiGenerator.setProgram(program);
+    midiGenerator.generate();
+}
+
+void MainWindow::on_minNote_valueChanged(int min)
+{
+    midiGenerator.setMinNote(min);
+    if (min > ui->maxNote->value()) {
+        ui->maxNote->setValue(min);
+        midiGenerator.setMaxNote(min);
+    }
+    midiGenerator.generate();
+}
+
+void MainWindow::on_maxNote_valueChanged(int max)
+{
+    midiGenerator.setMaxNote(max);
+    if (max < ui->minNote->value()) {
+        ui->minNote->setValue(max);
+        midiGenerator.setMinNote(max);
+    }
+    midiGenerator.generate();
 }

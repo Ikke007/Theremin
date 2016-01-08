@@ -29,6 +29,10 @@ private slots:
     void on_checkBox_invert_toggled(bool checked);
     void on_midiProgram_valueChanged(int arg1);
 
+    void on_minNote_valueChanged(int arg1);
+
+    void on_maxNote_valueChanged(int arg1);
+
 private:
     void sendSliderInput();
 
