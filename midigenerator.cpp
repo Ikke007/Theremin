@@ -1,5 +1,7 @@
 #include "midigenerator.h"
 
+#include <QDebug>
+
 MidiGenerator::MidiGenerator()
 {
     // TODO add midi output selection
@@ -10,14 +12,28 @@ MidiGenerator::MidiGenerator()
         midiOutput.open("Microsoft GS Wavetable Synth");
 
     // TODO let the user choose the midi channel
-
     midiOutput.sendProgram(channel, program); // irgendein Synth Programm
+
+    // Modulation Wheel / Vibrato? -> maximum
+    //midiOutput.sendController(channel, 1, 127);
+    // TODO make modWheel adjustable
 
     // eigentlich sollten das hier attack und release time sein,
     // aber da bin ich mir nicht so sicher...
     midiOutput.sendController(channel,72,40);
     midiOutput.sendController(channel,73,0);
     //midiOutput.sendController(midichannel,68,0);
+
+    vibratoTimer.setInterval(10);
+    QObject::connect(&vibratoTimer, SIGNAL(timeout()), this, SLOT(sendVibrato()));
+    vibratoTimer.start();
+}
+
+void MidiGenerator::sendVibrato() {
+    int pitchbend = (pitch + sin(vibSin) * vibratoRange) * 4096;
+    qDebug() << "pitchbend: " << pitchbend;
+    midiOutput.sendPitchBend(channel, pitchbend);
+    vibSin += vibratoSpeed;
 }
 
 void MidiGenerator::processRawInput(double frequency, double volume)
@@ -31,7 +47,8 @@ void MidiGenerator::processRawInput(double frequency, double volume)
         this->volume = volume;
     }
 
-    generate();
+    if (running)
+        generate();
 }
 
 void MidiGenerator::generate() {
@@ -39,9 +56,11 @@ void MidiGenerator::generate() {
     int noteRange = maxNote - minNote;
     double d_newNote = frequency * noteRange + minNote;
     int newNote = d_newNote;
-    double pitch = d_newNote - newNote;
+    pitch = d_newNote - newNote;
+    qDebug() << "set pitch: " << pitch;
 
-    midiOutput.sendPitchBend(channel, pitch * 4096);
+    if (!vibratoTimer.isActive())
+        midiOutput.sendPitchBend(channel, pitch * 4096);
 
     // fix for MS GS Wavetable Synth
     if (newNote < 0)
@@ -61,8 +80,16 @@ void MidiGenerator::generate() {
 }
 
 void MidiGenerator::stop() {
+    running = false;
+    vibratoTimer.stop();
     if (activeNote >= 0)
         midiOutput.sendNoteOff(channel, activeNote, 0);
+}
+
+void MidiGenerator::start() {
+    // TODO move contructor initialisations here
+    running = true;
+    vibratoTimer.start();
 }
 
 void MidiGenerator::setInvertInput(bool invert) {
@@ -84,5 +111,13 @@ void MidiGenerator::setMaxNote(int max) {
 
 void MidiGenerator::setMinNote(int min) {
     this->minNote = min;
+}
+
+void MidiGenerator::setVibratoRange(double range) {
+    this->vibratoRange = range;
+}
+
+void MidiGenerator::setVibratoSpeed(double speed) {
+    this->vibratoSpeed = speed;
 }
 

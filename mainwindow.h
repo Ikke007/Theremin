@@ -33,6 +33,10 @@ private slots:
 
     void on_maxNote_valueChanged(int arg1);
 
+    void on_sliderVibratoRange_valueChanged(int value);
+
+    void on_sliderVibratoSpeed_valueChanged(int value);
+
 private:
     void sendSliderInput();
 

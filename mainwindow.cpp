@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(&midiGenerator, SIGNAL(inputGenerated(double, double)),
                      this, SLOT(onInputGenerated(double, double)));
+
+    sendSliderInput();
 }
 
 MainWindow::~MainWindow()
@@ -80,4 +82,14 @@ void MainWindow::on_maxNote_valueChanged(int max)
         midiGenerator.setMinNote(max);
     }
     midiGenerator.generate();
+}
+
+void MainWindow::on_sliderVibratoRange_valueChanged(int value)
+{
+    midiGenerator.setVibratoRange(value / 100.0);
+}
+
+void MainWindow::on_sliderVibratoSpeed_valueChanged(int value)
+{
+    midiGenerator.setVibratoSpeed(value / 100.0);
 }
