@@ -4,8 +4,10 @@
 #include "math.h"
 
 MidiGenerator::MidiGenerator()
-    : running(true), minNote(40), maxNote(80), pitch(0), activeNote(-1),
-      program(71), channel(0), invertedInput(false),
+    : running(true),
+      invertedInput(false), minNote(0), maxNote(127),
+      pitch(0),
+      channel(0), program(71), activeNote(-1),
       vibSin(0), vibratoRange(0), vibratoSpeed(0.2)
 {
     // TODO add midi output selection
@@ -15,22 +17,8 @@ MidiGenerator::MidiGenerator()
     if (!midiOutput.open("CoolSoft VirtualMIDISynth"))
         midiOutput.open("Microsoft GS Wavetable Synth");
 
-    // TODO let the user choose the midi channel
-    midiOutput.sendProgram(channel, program); // irgendein Synth Programm
-
-    // Modulation Wheel / Vibrato? -> maximum
-    //midiOutput.sendController(channel, 1, 127);
-    // TODO make modWheel adjustable
-
-    // eigentlich sollten das hier attack und release time sein,
-    // aber da bin ich mir nicht so sicher...
-    midiOutput.sendController(channel,72,40);
-    midiOutput.sendController(channel,73,0);
-    //midiOutput.sendController(midichannel,68,0);
-
     vibratoTimer.setInterval(10);
     QObject::connect(&vibratoTimer, SIGNAL(timeout()), this, SLOT(sendVibrato()));
-    vibratoTimer.start();
 }
 
 void MidiGenerator::sendVibrato() {
@@ -86,10 +74,22 @@ void MidiGenerator::stop() {
     vibratoTimer.stop();
     if (activeNote >= 0)
         midiOutput.sendNoteOff(channel, activeNote, 0);
+    activeNote = -1;
 }
 
 void MidiGenerator::start() {
-    // TODO move contructor initialisations here
+    midiOutput.sendProgram(channel, program);
+
+    // Modulation Wheel / Vibrato? -> maximum
+    //midiOutput.sendController(channel, 1, 127);
+    // TODO make modWheel adjustable
+
+    // eigentlich sollten das hier attack und release time sein,
+    // aber da bin ich mir nicht so sicher...
+    midiOutput.sendController(channel,72,40);
+    midiOutput.sendController(channel,73,0);
+    //midiOutput.sendController(midichannel,68,0);
+
     running = true;
     vibratoTimer.start();
 }
@@ -123,3 +123,8 @@ void MidiGenerator::setVibratoSpeed(double speed) {
     this->vibratoSpeed = speed;
 }
 
+void MidiGenerator::setChannel(int channel) {
+    stop();
+    this->channel = channel;
+    start();
+}

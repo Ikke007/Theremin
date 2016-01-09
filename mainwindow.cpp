@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
         // start generating sound
         sendSliderInput();
     }
+
+    midiGenerator.start();
 }
 
 MainWindow::~MainWindow()
@@ -163,4 +165,11 @@ void MainWindow::on_actionInputSettings_triggered(bool checked)
 void MainWindow::on_inputSettingsDock_visibilityChanged(bool visible)
 {
     ui->actionInputSettings->setChecked(visible);
+}
+
+void MainWindow::on_midiChannel_valueChanged(int channel)
+{
+    midiGenerator.setChannel(channel);
+    if (!arduino.isAvailable())
+        sendSliderInput();
 }

@@ -13,6 +13,7 @@ public:
     MidiGenerator();
     void setInvertInput(bool invert);
     void setProgram(int program);
+    void setChannel(int channel);
     void setMaxNote(int max);
     void setMinNote(int min);
     void stop();
@@ -24,18 +25,20 @@ public:
     void setVibratoSpeed(double speed);
 
 private:
-    double frequency;
-    double volume;
-    bool invertedInput;
     drumstick::rt::MIDIOutput midiOutput;
-    int channel;
-    int program;
-    int activeNote;
-    double pitch;
+
+    bool running;
+    bool invertedInput;
     int minNote;
     int maxNote;
 
-    bool running;
+    double frequency;
+    double volume;
+    double pitch;
+
+    int channel;
+    int program;
+    int activeNote;
 
     double vibSin;
     double vibratoRange;

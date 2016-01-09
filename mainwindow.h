@@ -27,31 +27,20 @@ private slots:
     void on_frequencySlider_valueChanged(int value);
     void on_volumeSlider_valueChanged(int value);
     void on_checkBox_invert_toggled(bool checked);
-    void on_midiProgram_valueChanged(int arg1);
-
-    void on_minNote_valueChanged(int arg1);
-
-    void on_maxNote_valueChanged(int arg1);
-
+    void on_midiProgram_valueChanged(int value);
+    void on_minNote_valueChanged(int value);
+    void on_maxNote_valueChanged(int value);
     void on_sliderVibratoRange_valueChanged(int value);
-
     void on_sliderVibratoSpeed_valueChanged(int value);
-
     void on_actionMidiSettings_triggered(bool checked);
-
     void on_actionVibratoSettings_triggered(bool checked);
-
     void on_vibratoSettingsDock_visibilityChanged(bool visible);
-
     void on_midiSettingsDock_visibilityChanged(bool visible);
-
     void on_actionAlternativeInput_triggered(bool checked);
-
     void on_alternativeInputDock_visibilityChanged(bool visible);
-
     void on_actionInputSettings_triggered(bool checked);
-
     void on_inputSettingsDock_visibilityChanged(bool visible);
+    void on_midiChannel_valueChanged(int value);
 
 private:
     void sendSliderInput();
