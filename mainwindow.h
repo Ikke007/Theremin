@@ -37,6 +37,14 @@ private slots:
 
     void on_sliderVibratoSpeed_valueChanged(int value);
 
+    void on_actionMidiSettings_triggered(bool checked);
+
+    void on_actionVibratoSettings_triggered(bool checked);
+
+    void on_vibratoSettingsDock_visibilityChanged(bool visible);
+
+    void on_midiSettingsDock_visibilityChanged(bool visible);
+
 private:
     void sendSliderInput();
 

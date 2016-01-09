@@ -10,6 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->vibratoSettingsDock->setVisible(false);
+    ui->midiSettingsDock->setVisible(false);
+
     QObject::connect(&arduino, SIGNAL(processRawInput(double, double)),
                      &midiGenerator, SLOT(processRawInput(double, double)));
 
@@ -92,4 +95,24 @@ void MainWindow::on_sliderVibratoRange_valueChanged(int value)
 void MainWindow::on_sliderVibratoSpeed_valueChanged(int value)
 {
     midiGenerator.setVibratoSpeed(value / 100.0);
+}
+
+void MainWindow::on_actionMidiSettings_triggered(bool checked)
+{
+    ui->midiSettingsDock->setVisible(checked);
+}
+
+void MainWindow::on_actionVibratoSettings_triggered(bool checked)
+{
+    ui->vibratoSettingsDock->setVisible(checked);
+}
+
+void MainWindow::on_vibratoSettingsDock_visibilityChanged(bool visible)
+{
+    ui->actionVibratoSettings->setChecked(visible);
+}
+
+void MainWindow::on_midiSettingsDock_visibilityChanged(bool visible)
+{
+    ui->actionMidiSettings->setChecked(visible);
 }
