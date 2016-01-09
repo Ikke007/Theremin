@@ -32,7 +32,7 @@ MidiGenerator::MidiGenerator()
 
 void MidiGenerator::sendVibrato() {
     int pitchbend = (pitch + sin(vibSin) * vibratoRange) * 4096;
-    qDebug() << "pitchbend: " << pitchbend;
+    //qDebug() << "pitchbend: " << pitchbend;
     midiOutput.sendPitchBend(channel, pitchbend);
     vibSin += vibratoSpeed;
 }
@@ -58,7 +58,7 @@ void MidiGenerator::generate() {
     double d_newNote = frequency * noteRange + minNote;
     int newNote = d_newNote;
     pitch = d_newNote - newNote;
-    qDebug() << "set pitch: " << pitch;
+    //qDebug() << "set pitch: " << pitch;
 
     if (!vibratoTimer.isActive())
         midiOutput.sendPitchBend(channel, pitch * 4096);
