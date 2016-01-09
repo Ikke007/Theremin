@@ -1,6 +1,7 @@
 #include "midigenerator.h"
 
 #include <QDebug>
+#include "math.h"
 
 MidiGenerator::MidiGenerator()
 {

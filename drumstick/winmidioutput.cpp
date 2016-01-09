@@ -340,10 +340,11 @@ namespace rt {
 
     void MIDIOutput::sendPitchBend(int chan, int value)
     {
+        quint16 val = value + 8192; // value between -8192 and +8191
         WinMIDIPacket packet;
         packet.data[0] = MIDI_STATUS_PITCHBEND | (chan & MIDI_CHANNEL_MASK);
-        packet.data[1] = MIDI_LSB(value);
-        packet.data[2] = MIDI_MSB(value);
+        packet.data[1] = MIDI_LSB(val);
+        packet.data[2] = MIDI_MSB(val);
         d->sendShortMessage(packet);
     }
 
