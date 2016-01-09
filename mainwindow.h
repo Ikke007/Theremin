@@ -45,6 +45,14 @@ private slots:
 
     void on_midiSettingsDock_visibilityChanged(bool visible);
 
+    void on_actionAlternativeInput_triggered(bool checked);
+
+    void on_alternativeInputDock_visibilityChanged(bool visible);
+
+    void on_actionInputSettings_triggered(bool checked);
+
+    void on_inputSettingsDock_visibilityChanged(bool visible);
+
 private:
     void sendSliderInput();
 

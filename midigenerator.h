@@ -26,20 +26,20 @@ public:
 private:
     double frequency;
     double volume;
-    bool invertedInput = false;
+    bool invertedInput;
     drumstick::rt::MIDIOutput midiOutput;
-    int channel = 0;
-    int program = 71;
-    int activeNote = -1;
-    double pitch = 0;
-    int minNote = 40;
-    int maxNote = 80;
+    int channel;
+    int program;
+    int activeNote;
+    double pitch;
+    int minNote;
+    int maxNote;
 
-    bool running = true;
+    bool running;
 
-    double vibSin = 0;
-    double vibratoRange = 0;
-    double vibratoSpeed = 2;
+    double vibSin;
+    double vibratoRange;
+    double vibratoSpeed;
     QTimer vibratoTimer;
 
 public slots:

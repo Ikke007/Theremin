@@ -10,19 +10,41 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // hide DockWidgets
     ui->vibratoSettingsDock->setVisible(false);
     ui->midiSettingsDock->setVisible(false);
+    ui->alternativeInputDock->setVisible(false);
+    ui->inputSettingsDock->setVisible(false);
 
+    // tell the layout to always take only the minimum size
+    this->window()->layout()->setSizeConstraint(QLayout::SetFixedSize);
+
+    // apply default values
+    midiGenerator.setMaxNote(ui->maxNote->value());
+    midiGenerator.setMinNote(ui->minNote->value());
+    midiGenerator.setProgram(ui->midiProgram->value());
+    // TODO midiGenerator.setChannel(ui->midiChannel)
+    midiGenerator.setVibratoRange(ui->sliderVibratoRange->value() / 100.0);
+    midiGenerator.setVibratoSpeed(ui->sliderVibratoSpeed->value() / 100.0);
+
+    // connect signals
+    // arduino input
     QObject::connect(&arduino, SIGNAL(processRawInput(double, double)),
                      &midiGenerator, SLOT(processRawInput(double, double)));
-
+    // alternative (slider) input
     QObject::connect(this, SIGNAL(sendRawInput(double,double)),
                      &midiGenerator, SLOT(processRawInput(double,double)));
-
+    // callback after midi events have been created and send
     QObject::connect(&midiGenerator, SIGNAL(inputGenerated(double, double)),
                      this, SLOT(onInputGenerated(double, double)));
 
-    sendSliderInput();
+
+    if (!arduino.isAvailable()) {
+        qDebug() << "Arduino not found. Enabling alternative input.";
+        ui->alternativeInputDock->setVisible(true);
+        // start generating sound
+        sendSliderInput();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -37,11 +59,13 @@ void MainWindow::sendSliderInput() {
 
 void MainWindow::on_frequencySlider_valueChanged(int value)
 {
+    Q_UNUSED(value)
     sendSliderInput();
 }
 
 void MainWindow::on_volumeSlider_valueChanged(int value)
 {
+    Q_UNUSED(value)
     sendSliderInput();
 }
 
@@ -100,11 +124,13 @@ void MainWindow::on_sliderVibratoSpeed_valueChanged(int value)
 void MainWindow::on_actionMidiSettings_triggered(bool checked)
 {
     ui->midiSettingsDock->setVisible(checked);
+    ui->midiSettingsDock->raise();
 }
 
 void MainWindow::on_actionVibratoSettings_triggered(bool checked)
 {
     ui->vibratoSettingsDock->setVisible(checked);
+    ui->vibratoSettingsDock->raise();
 }
 
 void MainWindow::on_vibratoSettingsDock_visibilityChanged(bool visible)
@@ -115,4 +141,26 @@ void MainWindow::on_vibratoSettingsDock_visibilityChanged(bool visible)
 void MainWindow::on_midiSettingsDock_visibilityChanged(bool visible)
 {
     ui->actionMidiSettings->setChecked(visible);
+}
+
+void MainWindow::on_actionAlternativeInput_triggered(bool checked)
+{
+    ui->alternativeInputDock->setVisible(checked);
+    ui->alternativeInputDock->raise();
+}
+
+void MainWindow::on_alternativeInputDock_visibilityChanged(bool visible)
+{
+    ui->actionAlternativeInput->setChecked(visible);
+}
+
+void MainWindow::on_actionInputSettings_triggered(bool checked)
+{
+    ui->inputSettingsDock->setVisible(checked);
+    ui->inputSettingsDock->raise();
+}
+
+void MainWindow::on_inputSettingsDock_visibilityChanged(bool visible)
+{
+    ui->actionInputSettings->setChecked(visible);
 }

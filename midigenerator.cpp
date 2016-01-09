@@ -4,6 +4,9 @@
 #include "math.h"
 
 MidiGenerator::MidiGenerator()
+    : running(true), minNote(40), maxNote(80), pitch(0), activeNote(-1),
+      program(71), channel(0), invertedInput(false),
+      vibSin(0), vibratoRange(0), vibratoSpeed(0.2)
 {
     // TODO add midi output selection
         //QStringList connections = midiOutput.connections(true);
@@ -32,7 +35,6 @@ MidiGenerator::MidiGenerator()
 
 void MidiGenerator::sendVibrato() {
     int pitchbend = (0.5 * pitch + sin(vibSin) * vibratoRange) * 8191;
-    //qDebug() << "pitchbend: " << pitchbend;
     midiOutput.sendPitchBend(channel, pitchbend);
     vibSin += vibratoSpeed;
 }
@@ -58,7 +60,6 @@ void MidiGenerator::generate() {
     double d_newNote = frequency * noteRange + minNote;
     int newNote = d_newNote;
     pitch = d_newNote - newNote;
-    //qDebug() << "set pitch: " << pitch;
 
     if (!vibratoTimer.isActive())
         midiOutput.sendPitchBend(channel, pitch * 4096);

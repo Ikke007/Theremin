@@ -10,13 +10,14 @@ class ArduinoController : public QObject
 public:
     ArduinoController();
     ~ArduinoController();
+    bool isAvailable();
 
 private:
     QSerialPort *arduino;
     static const quint16 arduino_due_verndor_id = 9025;
     static const quint16 arduino_due_product_id = 61;
     QString arduino_port_name;
-    bool arduino_is_available;
+    bool is_available;
     QByteArray serialData;
     QString serialBuffer;
 
