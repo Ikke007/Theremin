@@ -31,7 +31,7 @@ MidiGenerator::MidiGenerator()
 }
 
 void MidiGenerator::sendVibrato() {
-    int pitchbend = (pitch + sin(vibSin) * vibratoRange) * 4096;
+    int pitchbend = (0.5 * pitch + sin(vibSin) * vibratoRange) * 8191;
     //qDebug() << "pitchbend: " << pitchbend;
     midiOutput.sendPitchBend(channel, pitchbend);
     vibSin += vibratoSpeed;
