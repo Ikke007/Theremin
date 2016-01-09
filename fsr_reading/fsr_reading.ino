@@ -18,5 +18,5 @@ void loop(void) {
   Serial.print(",");
 
   Serial.flush();
-  delay(10);
+  delay(20);
 }

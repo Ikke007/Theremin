@@ -29,11 +29,11 @@ private:
     bool invertedInput = false;
     drumstick::rt::MIDIOutput midiOutput;
     int channel = 0;
-    int program = 50;
+    int program = 71;
     int activeNote = -1;
     double pitch = 0;
-    int minNote = 0;
-    int maxNote = 127;
+    int minNote = 40;
+    int maxNote = 80;
 
     bool running = true;
 
