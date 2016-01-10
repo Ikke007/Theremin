@@ -43,7 +43,7 @@ void ArduinoController::readSerial()
         serialBuffer += QString::fromStdString(serialData.toStdString());
     }else{
         qDebug() << "FSR1: " << bufferSplit[0].toDouble() << ", FSR2: " << bufferSplit[1].toDouble();
-        processRawInput(bufferSplit[0].toDouble() / 1024.0, bufferSplit[1].toDouble() / 1024.0);
+        processRawInput(bufferSplit[0].toDouble() / 4096.0, bufferSplit[1].toDouble() / 4096.0);
         serialBuffer = "";
     }
 }
