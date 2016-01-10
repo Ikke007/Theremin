@@ -10,6 +10,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // setup GraphViewWidget
+    ui->graphWidget->addGraph(QColor(255,0,0));
+    ui->graphWidget->addGraph(QColor(0,255,0));
+
     // hide DockWidgets
     ui->vibratoSettingsDock->setVisible(false);
     ui->midiSettingsDock->setVisible(false);
@@ -84,12 +88,9 @@ void MainWindow::on_volumeSlider_valueChanged(int value)
 
 void MainWindow::onInputGenerated(double frequency, double volume)
 {
-    // display frequency
-    ui->progressBar->setValue(frequency * 100);
-    ui->lcdNumber->display(frequency * 100);
-    // display volume
-    ui->progressBar_2->setValue(volume * 100);
-    ui->lcdNumber_2->display(volume * 100);
+    // adjust display
+    ui->graphWidget->setValue(0, frequency);
+    ui->graphWidget->setValue(1, volume);
 }
 
 void MainWindow::on_checkBox_invert_toggled(bool checked)

@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     arduinocontroller.cpp \
-    midigenerator.cpp
+    midigenerator.cpp \
+    graphviewwidget.cpp
 
 HEADERS  += mainwindow.h \
     arduinocontroller.h \
-    midigenerator.h
+    midigenerator.h \
+    graphviewwidget.h
 
 FORMS    += mainwindow.ui
 
