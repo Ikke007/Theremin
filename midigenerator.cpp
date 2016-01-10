@@ -10,15 +10,18 @@ MidiGenerator::MidiGenerator()
       channel(0), program(71), activeNote(-1),
       vibSin(0), vibratoRange(0), vibratoSpeed(0.2)
 {
-    // TODO add midi output selection
-        //QStringList connections = midiOutput.connections(true);
-        //ui->comboBox->addItems(connections);
-
-    if (!midiOutput.open("CoolSoft VirtualMIDISynth"))
-        midiOutput.open("Microsoft GS Wavetable Synth");
-
     vibratoTimer.setInterval(10);
     QObject::connect(&vibratoTimer, SIGNAL(timeout()), this, SLOT(sendVibrato()));
+}
+
+QStringList MidiGenerator::connections()
+{
+    return midiOutput.connections(true);
+}
+
+bool MidiGenerator::open(QString deviceName)
+{
+    return midiOutput.open(deviceName);
 }
 
 void MidiGenerator::sendVibrato() {

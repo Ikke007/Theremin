@@ -18,6 +18,8 @@ public:
     void setMinNote(int min);
     void stop();
     void start();
+    bool open(QString deviceName);
+    QStringList connections();
     void generate();
     /* 0(min) - 1(max) */
     void setVibratoRange(double range);

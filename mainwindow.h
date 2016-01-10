@@ -41,6 +41,7 @@ private slots:
     void on_actionInputSettings_triggered(bool checked);
     void on_inputSettingsDock_visibilityChanged(bool visible);
     void on_midiChannel_valueChanged(int value);
+    void on_midiDeviceComboBox_currentIndexChanged(const QString &arg1);
 
 private:
     void sendSliderInput();

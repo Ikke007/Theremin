@@ -19,11 +19,22 @@ MainWindow::MainWindow(QWidget *parent) :
     // tell the layout to always take only the minimum size
     this->window()->layout()->setSizeConstraint(QLayout::SetFixedSize);
 
+    QStringList connections = midiGenerator.connections();
+    ui->midiDeviceComboBox->addItems(connections);
+
+    for(int i = 0; i < connections.size(); i++)
+    {
+        if (midiGenerator.open(connections.at(i))) {
+            ui->midiDeviceComboBox->setCurrentIndex(i);
+            break;
+        }
+    }
+
     // apply default values
     midiGenerator.setMaxNote(ui->maxNote->value());
     midiGenerator.setMinNote(ui->minNote->value());
     midiGenerator.setProgram(ui->midiProgram->value());
-    // TODO midiGenerator.setChannel(ui->midiChannel)
+    midiGenerator.setChannel(ui->midiChannel->value());
     midiGenerator.setVibratoRange(ui->sliderVibratoRange->value() / 100.0);
     midiGenerator.setVibratoSpeed(ui->sliderVibratoSpeed->value() / 100.0);
 
@@ -172,4 +183,12 @@ void MainWindow::on_midiChannel_valueChanged(int channel)
     midiGenerator.setChannel(channel);
     if (!arduino.isAvailable())
         sendSliderInput();
+}
+
+void MainWindow::on_midiDeviceComboBox_currentIndexChanged(const QString &text)
+{
+    if (ui->midiSettingsDock->isVisible() && !midiGenerator.open(text)) {
+          QMessageBox::warning(this, "MIDI connection failure",
+             "Connection \"" + text + "\" not available.");
+      }
 }
