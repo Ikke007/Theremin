@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Tangible Theremin</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
+  <widget class="GraphViewWidget" name="graphWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -22,38 +22,10 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>300</width>
+     <width>500</width>
      <height>300</height>
     </size>
    </property>
-   <widget class="GraphViewWidget" name="graphWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>500</width>
-      <height>300</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-      <horstretch>1</horstretch>
-      <verstretch>1</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>500</width>
-      <height>300</height>
-     </size>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>500</width>
-      <height>300</height>
-     </size>
-    </property>
-   </widget>
   </widget>
   <widget class="QDockWidget" name="midiSettingsDock">
    <property name="enabled">
@@ -217,7 +189,7 @@
     <string>Vibrato Settings</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>2</number>
+    <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_2">
     <widget class="QLabel" name="label_7">
@@ -376,7 +348,7 @@
    <property name="minimumSize">
     <size>
      <width>200</width>
-     <height>100</height>
+     <height>120</height>
     </size>
    </property>
    <property name="floating">

@@ -9,7 +9,6 @@ GraphViewWidget::GraphViewWidget(QWidget *parent)
     painter = new QPainter(pixmap);
     pen.setWidth(2);
 
-
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer.setInterval(100);
     timer.start();
@@ -68,6 +67,7 @@ void GraphViewWidget::resizeEvent(QResizeEvent *)
 {
     delete painter;
     delete pixmap;
+    row = 0;
     pixmap = new QPixmap(this->width(), this->height());
     painter = new QPainter(pixmap);
 }
