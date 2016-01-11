@@ -85,11 +85,9 @@ void MidiGenerator::start() {
 
     // Modulation Wheel / Vibrato? -> maximum
     //midiOutput.sendController(channel, 1, 127);
-    // TODO make modWheel adjustable
 
     // eigentlich sollten das hier attack und release time sein,
-    // aber da bin ich mir nicht so sicher...
-    midiOutput.sendController(channel,72,40);
+    midiOutput.sendController(channel,72,0);
     midiOutput.sendController(channel,73,0);
     //midiOutput.sendController(midichannel,68,0);
 
