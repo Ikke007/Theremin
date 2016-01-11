@@ -25,4 +25,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
+win32: RC_ICONS += theremin.ico
+
 include(drumstick/drumstick.pro)

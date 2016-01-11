@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Tangible Theremin</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>theremin.ico</normaloff>theremin.ico</iconset>
+  </property>
   <widget class="GraphViewWidget" name="graphWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
