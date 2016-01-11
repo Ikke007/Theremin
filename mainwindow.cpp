@@ -20,9 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->alternativeInputDock->setVisible(false);
     ui->inputSettingsDock->setVisible(false);
 
-    // tell the layout to always take only the minimum size
-    this->window()->layout()->setSizeConstraint(QLayout::SetFixedSize);
-
     QStringList connections = midiGenerator.connections();
     ui->midiDeviceComboBox->addItems(connections);
 
