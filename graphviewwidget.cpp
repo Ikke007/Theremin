@@ -7,10 +7,10 @@ GraphViewWidget::GraphViewWidget(QWidget *parent)
 {
     pixmap = new QPixmap();
     painter = new QPainter(pixmap);
-    pen.setWidth(2);
+    pen.setWidth(1);
 
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
-    timer.setInterval(100);
+    timer.setInterval(50);
     timer.start();
 }
 
@@ -38,7 +38,8 @@ void GraphViewWidget::onTimeout()
         last.replace(index, current.at(index));
     }
 
-    if (++row == pixmap->width()) {
+    row += 2;
+    if (row == pixmap->width()) {
         pixmap->fill(Qt::black);
         row = 0;
     }
