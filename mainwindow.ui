@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>902</width>
-    <height>461</height>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
    <property name="minimumSize">
     <size>
      <width>200</width>
-     <height>182</height>
+     <height>160</height>
     </size>
    </property>
    <property name="baseSize">
@@ -174,8 +174,8 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>126</width>
-     <height>166</height>
+     <width>86</width>
+     <height>128</height>
     </size>
    </property>
    <property name="baseSize">
@@ -248,7 +248,7 @@
    <property name="minimumSize">
     <size>
      <width>500</width>
-     <height>112</height>
+     <height>110</height>
     </size>
    </property>
    <property name="floating">
@@ -324,8 +324,8 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>198</width>
-     <height>152</height>
+     <width>139</width>
+     <height>113</height>
     </size>
    </property>
    <property name="floating">
