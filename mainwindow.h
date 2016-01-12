@@ -43,6 +43,8 @@ private slots:
     void on_midiChannel_valueChanged(int value);
     void on_midiDeviceComboBox_currentIndexChanged(const QString &arg1);
 
+    void on_actionFullscreen_triggered(bool checked);
+
 private:
     void sendSliderInput();
 

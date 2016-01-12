@@ -190,3 +190,11 @@ void MainWindow::on_midiDeviceComboBox_currentIndexChanged(const QString &text)
              "Connection \"" + text + "\" not available.");
       }
 }
+
+void MainWindow::on_actionFullscreen_triggered(bool checked)
+{
+    if (checked)
+        this->setWindowState(Qt::WindowFullScreen);
+    else
+        this->setWindowState(Qt::WindowNoState);
+}

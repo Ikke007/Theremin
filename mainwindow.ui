@@ -163,6 +163,7 @@
    <addaction name="actionVibratoSettings"/>
    <addaction name="actionInputSettings"/>
    <addaction name="actionAlternativeInput"/>
+   <addaction name="actionFullscreen"/>
   </widget>
   <widget class="QDockWidget" name="vibratoSettingsDock">
    <property name="sizePolicy">
@@ -453,6 +454,17 @@
    </property>
    <property name="toolTip">
     <string>Input Settings</string>
+   </property>
+  </action>
+  <action name="actionFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fullscreen</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle Fullscreen</string>
    </property>
   </action>
  </widget>

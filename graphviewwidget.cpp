@@ -5,7 +5,7 @@
 GraphViewWidget::GraphViewWidget(QWidget *parent)
     : QWidget(parent)
 {
-    pixmap = new QPixmap();
+    pixmap = new QPixmap(this->width(), this->height());
     painter = new QPainter(pixmap);
     pen.setWidth(1);
 
