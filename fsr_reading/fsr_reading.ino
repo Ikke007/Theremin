@@ -16,7 +16,7 @@ void loop(void) {
   
   fsrReading = analogRead(fsrPin1);
   Serial.print(fsrReading);  // the raw analog reading
-  Serial.print(",");
+  Serial.print(";");
 
   Serial.flush();
   delay(20);

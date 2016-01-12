@@ -37,14 +37,25 @@ ArduinoController::ArduinoController()
 
 void ArduinoController::readSerial()
 {
-    QStringList bufferSplit = serialBuffer.split(",");
-    if(bufferSplit.length() < 3){
-        serialData = arduino->readAll();
-        serialBuffer += QString::fromStdString(serialData.toStdString());
-    }else{
-        qDebug() << "FSR1: " << bufferSplit[0].toDouble() << ", FSR2: " << bufferSplit[1].toDouble();
-        processRawInput(bufferSplit[0].toDouble() / 4096.0, bufferSplit[1].toDouble() / 4096.0);
-        serialBuffer = "";
+    serialData = arduino->readAll();
+    serialBuffer += QString::fromStdString(serialData.toStdString());
+    //qDebug() << serialBuffer;
+
+    QStringList bufferSplit = serialBuffer.split(";");
+    if (bufferSplit.length() < 2) {
+        //qDebug() << "no data";
+    } else {
+        for (int i = bufferSplit.length() - 2; i >= 0; i--) {
+            QStringList dataSplit = bufferSplit[i].split(",");
+            if (dataSplit.length() != 2 || dataSplit[0] == "") {
+                //qDebug() << "invalid data: \"" << dataSplit << "\"";
+            } else {
+                qDebug() << "FSR1: " << dataSplit[0] << ", FSR2: " << dataSplit[1];
+                processRawInput(dataSplit[0].toDouble() / 4096.0, dataSplit[1].toDouble() / 4096.0);
+                serialBuffer = bufferSplit.last();
+                return;
+            }
+        }
     }
 }
 
